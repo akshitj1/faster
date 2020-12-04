@@ -1,0 +1,7 @@
+.rosinstall
+.rosinstall.bak
+build
+install
+log
+run*.sh
+*.log

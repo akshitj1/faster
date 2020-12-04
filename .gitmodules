@@ -1,0 +1,6 @@
+[submodule "src.image_common"]
+	branch = master
+[submodule "src/image_common"]
+	branch = master
+	path = src/image_common
+	url = https://github.com/ros-perception/image_common.git
