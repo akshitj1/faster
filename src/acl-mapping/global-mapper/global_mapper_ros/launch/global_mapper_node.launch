@@ -27,7 +27,7 @@
   <arg name="sparse_path_topic" default="~sparse_path" />
 
   <!-- node -->
-  <node ns="$(arg quad)" pkg="global_mapper_ros" type="global_mapper_node" name="global_mapper_ros" output="screen">
+  <node ns="$(arg quad)" pkg="global_mapper_ros" type="global_mapper_node" name="global_mapper_ros" output="log">
       <!-- params -->
       <rosparam command="load" if="$(arg load_params)" file="$(find global_mapper_ros)/cfg/$(arg param_file)"/>
 

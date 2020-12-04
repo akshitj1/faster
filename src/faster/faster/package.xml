@@ -21,7 +21,7 @@
   <build_depend>pcl_ros</build_depend>
   <build_depend>behavior_selector</build_depend>
   <build_depend>global_mapper_ros</build_depend>
-  
+  <build_depend>acl_sim</build_depend> 
 
   <build_depend>message_generation</build_depend>
   <run_depend>message_runtime</run_depend>

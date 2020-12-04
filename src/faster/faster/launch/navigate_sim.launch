@@ -1,0 +1,124 @@
+<launch>
+    <arg name="output" default="log"/>
+    
+    <arg name="world_name" default="$(find acl_sim)/worlds/density01seed0.world" />
+    <arg name="quad" default="SQ01s" />
+    <arg name="is_ground_robot" default="false" />
+
+    <!-- quad spawn coords -->
+    <arg name="x" default="0" />
+    <arg name="y" default="0" />
+    <arg name="z" default="0" />
+    <arg name="yaw" default="0.0" />
+
+    <!-- global mapper params -->
+    <arg name="global_mapper_params" default="$(find global_mapper_ros)/cfg/global_mapper.yaml" />
+
+    <!-- input topics -->
+    <!--NORMAL:  camera/depth/image_rect_raw -->
+    <!--FILTERED:  depthmap_filter/depth_filt -->
+    <arg name="depth_image_topic" default="camera/depth/image_rect_raw" />
+    <arg name="pose_topic" default="state" /> <!--/pose-->
+    <arg name="goal_topic" default="/move_base_simple/goal" />
+
+    <!-- used for the Jackal -->
+    <!-- <arg name="odom_topic" default="odometry/local_filtered" /> -->
+    <arg name="odom_topic" default="odometry/filtered_no" />
+
+    <!-- output topics -->
+    <arg name="occupancy_grid_topic" default="~occupancy_grid" />
+    <arg name="unknown_grid_topic" default="~unknown_grid" />
+    <arg name="frontier_grid_topic" default="~frontier_grid" />
+    <arg name="distance_grid_topic" default="~distance_grid" />
+    <arg name="cost_grid_topic" default="~cost_grid" />
+    <arg name="path_topic" default="~path" />
+    <arg name="sparse_path_topic" default="~sparse_path" />
+
+    <!-- faster args -->
+    <arg name="faster_params" default="$(find faster)/param/faster.yaml" />
+
+    <!-- Starts gazebo and loads world with cylindrical pillars -->
+    <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
+        <arg name="output" value="$(arg output)" />
+    </include>
+
+    <!-- Spawn vehicle in gazebo -->
+    <include file="$(find acl_sim)/launch/spawn_quadrotor_with_asus.launch">
+        <arg name="name" value="$(arg quad)" />
+        <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)" />
+        <arg name="x" value="$(arg x)" />
+        <arg name="y" value="$(arg y)" />
+        <arg name="z" value="$(arg z)" />
+        <arg name="yaw" default="$(arg yaw)" />
+    </include>
+
+    <!-- Camera to body tf -->
+    <node pkg="tf" type="static_transform_publisher" name="camera2body" args="0 0 0 -1.57 0 -1.57 $(arg quad) camera 100" />
+
+    <!-- Vicon to world tf -->
+    <!-- The namespace is needed only for the multi-agent simulations. If not, each agent kills the node of the other one-->
+    <node ns="$(arg quad)" pkg="tf" type="static_transform_publisher" name="vicon2world" args="0 0 0 0 0 0 /world /vicon 100" />
+
+    <!-- Start perfect tracker node to publish state estimates -->
+    <node ns="$(arg quad)" name="perfect_tracker" pkg="acl_sim" type="perfect_tracker.py" output="log">
+        <param name="x" value="$(arg x)" />
+        <param name="y" value="$(arg y)" />
+        <param name="z" value="$(arg z)" />
+        <param name="yaw" value="$(arg yaw)" />
+    </node>
+
+    <!-- Starts global mapper node. listens to depth image, goal set. transforms depth image to 3d occupancy voxel grid. -->
+    <node ns="$(arg quad)" pkg="global_mapper_ros" type="global_mapper_node" name="global_mapper_ros" output="$(arg output)">
+        <!-- params -->
+        <rosparam command="load" file="$(arg global_mapper_params)" />
+
+        <!-- input remaps -->
+        <remap from="~depth_image_topic" to="$(arg depth_image_topic)" />
+        <remap from="~pose_topic" to="$(arg pose_topic)" />
+        <remap from="~goal_topic" to="$(arg goal_topic)" />
+        <remap from="~odom_topic" to="$(arg odom_topic)" />
+
+        <!-- output remaps -->
+        <remap from="~occupancy_grid_topic" to="$(arg occupancy_grid_topic)" />
+        <remap from="~unknown_grid_topic" to="$(arg unknown_grid_topic)" />
+        <remap from="~frontier_grid_topic" to="$(arg frontier_grid_topic)" />
+        <remap from="~distance_grid_topic" to="$(arg distance_grid_topic)" />
+        <remap from="~cost_grid_topic" to="$(arg cost_grid_topic)" />
+        <remap from="~path_topic" to="$(arg path_topic)" />
+        <remap from="~sparse_path_topic" to="$(arg sparse_path_topic)" />
+    </node>
+
+    <!-- Starts trajectory planner node. Jump point search -->
+    <node ns="$(arg quad)" name="faster" pkg="faster" type="faster_node" output="$(arg output)" clear_params="true">
+        <rosparam file="$(arg faster_params)" command="load" />
+        <rosparam file="$(arg global_mapper_params)" command="load" ns="mapper" />
+
+        <!-- Subscriptions -->
+        <remap from="~state" to="state" />
+        <remap from="~term_goal" to="/move_base_simple/goal" />
+        <remap from="~occup_grid" to="global_mapper_ros/occupancy_grid" /> <!--PointCloud of the occupancy grid-->
+        <remap from="~unknown_grid" to="global_mapper_ros/unknown_grid" /> <!--PointCloud of the unknown map-->
+        <remap from="~pcloud" to="camera/cloud" /> <!--HARDWARE:    camera/depth/color/points, SIMULATION:  camera/cloud -->
+        <!-- <remap from="~odom" to="odometry/local_filtered"/> -->
+
+        <!-- Publications -->
+        <remap from="~traj" to="traj" />
+        <remap from="~goal" to="goal" />
+        <remap from="~setpoint" to="setpoint" />
+        <remap from="~log_topic" to="log_topic" />
+    </node>
+
+    <!-- Start faster commands -->
+    <node ns="$(arg quad)" name="faster_commands" pkg="faster" type="faster_commands.py" output="$(arg output)">
+        <param name="is_ground_robot" type="bool" value="$(arg is_ground_robot)" />
+    </node>
+
+    <!-- Start Rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find faster)/rviz_cfgs/cvx_$(arg quad).rviz" />
+
+    <!-- Start GUI -->
+    <node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" />
+    <!-- args="perspective-file $(find faster)/rqt_cfgs/demo_interface.perspective" -->
+</launch>

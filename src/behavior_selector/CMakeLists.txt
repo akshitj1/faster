@@ -15,6 +15,9 @@ find_package(catkin REQUIRED COMPONENTS
     rqt_gui_py
 )
 
+catkin_python_setup()
+
+
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
@@ -25,6 +28,7 @@ generate_messages(
 	DEPENDENCIES
 	std_msgs
 )
+
 
 catkin_package()
 

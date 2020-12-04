@@ -60,7 +60,7 @@ class MissionModePlugin(Plugin):
         try:
             mm = rospy.ServiceProxy('change_mode', MissionModeChange)
             mm(mode)
-        except rospy.ServiceException, e:
-            print "Service call failed: %s"%e
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
 
     

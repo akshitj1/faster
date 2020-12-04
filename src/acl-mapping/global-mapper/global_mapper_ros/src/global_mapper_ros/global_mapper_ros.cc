@@ -671,7 +671,9 @@ void GlobalMapperRos::DepthImageCallback(const sensor_msgs::Image::ConstPtr& ima
   }
   catch (tf2::TransformException& ex)
   {
+    ROS_WARN("lookup transform failed with target: %s, source: %s", target_frame.c_str(), image_msg->header.frame_id.c_str());
     ROS_WARN("[GlobalMapperRos::DepthImageCallback] %s", ex.what());
+    ROS_WARN("Frames:\n%s", tf_buffer_.allFramesAsString().c_str());
     return;
   }
 

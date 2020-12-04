@@ -3,7 +3,7 @@
 	<arg name="is_ground_robot" default="false"/>
 	
 	<!-- Start faster commands -->
-	<node ns="$(arg quad)" name="faster_commands" pkg="faster" type="faster_commands.py" output="screen">
+	<node ns="$(arg quad)" name="faster_commands" pkg="faster" type="faster_commands.py" output="log">
 		<param name="is_ground_robot" type="bool" value="$(arg is_ground_robot)" />
 	</node>
 

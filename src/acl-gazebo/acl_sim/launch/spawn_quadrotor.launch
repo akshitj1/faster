@@ -28,6 +28,6 @@
            -z $(arg z)
            -Y $(arg yaw)
            -model $(arg name)"
-        respawn="false" output="screen"/>
+        respawn="false" output="log"/>
 
 </launch>
