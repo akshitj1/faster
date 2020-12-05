@@ -1,6 +1,6 @@
 # FASTER: Fast and Safe Trajectory Planner for Flights in Unknown Environments
 
-# About
+## About
 This is adapted from original [repo](https://github.com/mit-acl/faster), by MIT-acl(Aerospace Controls Lab). Original repo demonstrates capabilities:
 - quadrotor control
 - simulate depth camera
@@ -17,26 +17,26 @@ Goal of this repo is to build FASTER, its dependencies and ros from source on li
 
 I have included `src` directory containing dependencies too, to include changes on pulled sub-repos. Git submodules does not works as submodules needs to be pushed to corresponding repos. Patch file may have been better option but, I have no previous experience with it.
 
-# Instructions
+## Instructions
 Tested on:
 - ROS-noetic
 - Fedora OS
 - Macbook Pro (2012)
 
 But, you should be able to adapt, as scarcely depends on pre-built binaries.
-## Pull dependencies
+### Pull dependencies
 ```
 ./fetch.sh
 ```
-## Build
+### Build
 ```
 ./build.sh
 ```
-## Launch simulation
+### Launch simulation
 ```
 ./run.sh
 ```
-## Interact
+### Interact
 * High level command to start quadrotor and hover
     * `rqt: Plugins > Robot Tools > Mission Mode > [click] START`
 * Set goal to nvigate to: 
