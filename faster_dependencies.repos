@@ -51,3 +51,7 @@ repositories:
         type: git
         url: https://github.com/ros-perception/perception_pcl.git
         version: 1.7.2
+    tinyxml2:
+        type: git
+        url: git@github.com:leethomason/tinyxml2.git
+        version: 8.0.0

@@ -48,6 +48,13 @@ catkin_package(
 
 #add_library(disable_physics SHARED ./src/disable_physics.cc)  
 #target_link_libraries(disable_physics ${GAZEBO_LIBRARIES})
+
+install(TARGETS create_random_forest
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
 catkin_install_python(PROGRAMS
   scripts/flightStatus.py
   scripts/monte_carlo_2.py

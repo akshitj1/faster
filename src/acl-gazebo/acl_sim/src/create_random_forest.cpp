@@ -44,7 +44,7 @@ void GazeboCubeSpawner::spawnCube(const std::string& name, const std::string& fr
                                   float qx, float qy, float qz, float qw, float width, float height, float depth,
                                   float mass)
 {
-  spawnPrimitive(name, false, frame_id, x, y, z, qx, qy, qz, qw, width, height, depth, mass);
+  spawnPrimitive(name, true, frame_id, x, y, z, qx, qy, qz, qw, width, height, depth, mass);
 }
 
 void GazeboCubeSpawner::spawnPrimitive(const std::string& name, const bool doCube, const std::string& frame_id, float x,

@@ -8,3 +8,7 @@ vcs import --recursive --input faster_dependencies.repos --repos src
 rosdep install -y -r -q --from-paths src --ignore-src --rosdistro noetic
 # install pcl if above doesn't installs pcl libraries
 # dnf install pcl pcl-devel # maybe only pcl-devel is req.
+
+# install tinyxml2
+# todo: integrate this into colcon build system
+# mkdir src/tinyxml2/build; pushd src/tinyxml2/build; cmake ..; make; make install; popd; 

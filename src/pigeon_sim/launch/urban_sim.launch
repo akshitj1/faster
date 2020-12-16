@@ -1,0 +1,9 @@
+<launch>	
+	<!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="output" value="log"/>
+		<arg name="gui" value="false"/>
+    </include>
+    
+    <!-- <node pkg="acl_sim" type="create_random_forest" name="create_random_forest" /> -->
+</launch>

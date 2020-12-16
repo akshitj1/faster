@@ -5,4 +5,4 @@ source ~/repos/ros_noetic/install_isolated/setup.bash
 ## setup this repo environment variables
 source ~/repos/faster/install/setup.bash
 ## launch simulation for navigation - gazebo, controller, planner nodes, rviz, rqt
-roslaunch faster navigate_sim.launch
+roslaunch pigeon_sim urban_sim.launch
