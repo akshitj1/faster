@@ -1,9 +1,42 @@
-<launch>	
-	<!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+<launch>
+	<arg name="gazebo_gui" default="true"/>
+	<arg name="gazebo_gui_start_delay" default="5.0" />
+
+	<arg name="quad" default="SQ01s" />
+	<arg name="output" default="screen"/>
+
+	<!-- quad spawn coords -->
+	<arg name="x" default="0" />
+	<arg name="y" default="0" />
+	<arg name="z" default="1.32" />
+	<!-- <arg name="z" default="33" /> -->
+	<arg name="yaw" default="0.0" />
+
+
+	<!-- launch gazebo server(/client) with empty world. ground plane and client camera is set -->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<arg name="output" value="log"/>
-		<arg name="gui" value="false"/>
-    </include>
-    
-    <!-- <node pkg="acl_sim" type="create_random_forest" name="create_random_forest" /> -->
+		<arg name="output" value="$(arg output)" />
+		<arg name="gui" value="false" />
+		<arg name="world_name" value="$(find acl_sim)/worlds/empty.world" />
+	</include>
+
+	<!-- build city with buildings in gazebo -->
+	<node name="city_builder_node" pkg="pigeon_sim" type="city_builder_node" output="$(arg output)" />
+
+	<!-- spawn quadrotor on top of origin building -->
+	<include file="$(find acl_sim)/launch/spawn_quadrotor_with_asus.launch">
+		<arg name="name" value="$(arg quad)" />
+		<arg name="tf_prefix" default="$(arg quad)" />
+		<arg name="x" value="$(arg x)" />
+		<arg name="y" value="$(arg y)" />
+		<arg name="z" value="$(arg z)" />
+		<arg name="yaw" default="$(arg yaw)" />
+		<arg name="output" default="$(arg output)"/>
+	</include>
+
+	<!-- start gazebo client -->
+	<group if="$(arg gazebo_gui)">
+		<!-- gazebo client gets stuck, if delay is not introduced. -->
+		<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" launch-prefix="bash -c 'sleep $(arg gazebo_gui_start_delay); $0 $@' " respawn="false" output="$(arg output)" args="" required="false" />
+	</group>
 </launch>

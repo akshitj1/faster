@@ -9,7 +9,7 @@ source ~/repos/ros_noetic/install_isolated/setup.bash
 ## --packages-select <pkg>: build <pkg> only, skipping deps
 colcon build \
 --cmake-args "-Wno-dev -Wno-deprecated -DCMAKE_BUILD_TYPE=Debug" \
---packages-select pigeon_sim
+--packages-up-to pigeon_sim
 # --packages-select faster
 # --symlink-install \
 ## Do not abort on first package build failure, continue to rest of the packages

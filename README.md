@@ -10,6 +10,7 @@ This is adapted from original [repo](https://github.com/mit-acl/faster), by MIT-
 - visualization of trajectory, (space/free/occ) grids, gazebo physics simulation.
 
 with limitations:
+- Controller is useless as it assumes perfect tracking with unbounded actuation. Even take-off uses pseudo p-controller to set altitude iteratively.
 - Unknown and occupancy grid are of world dimensions. Memory costly.
 - for ellipse inflation in safe flight corridor, all points are checked iteratively. points clipped to cube vertices. time costly
 - uses perfect state directly from simulation

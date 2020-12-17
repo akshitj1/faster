@@ -92,8 +92,10 @@
       </model>
     </state>
     <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose>-2.8766 -1.31812 3.94295 4.3238e-17 0.87379 0.628159</pose>
+      <!-- https://answers.ros.org/question/11178/initial-view-after-gazebo-starts/ -->
+      <camera name='gzclient_camera'>
+        <pose>14 -7 9 0 0.275 2.356</pose>
+        <!-- <pose>-2.8766 -1.31812 3.94295 4.3238e-17 0.87379 0.628159</pose> -->
         <view_controller>orbit</view_controller>
       </camera>
     </gui>

@@ -4,6 +4,7 @@
   <arg name="name" default="quadrotor"/>
   <arg name="model" default="$(find acl_sim)/urdf/quadrotor.gazebo.xacro"/>
   <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)"/>
+  <arg name="output" default="log"/>
 
   <arg name="x" default="0.0"/>
   <arg name="y" default="0.0"/>
@@ -28,6 +29,6 @@
            -z $(arg z)
            -Y $(arg yaw)
            -model $(arg name)"
-        respawn="false" output="log"/>
+        respawn="false" output="$(arg output)"/>
 
 </launch>

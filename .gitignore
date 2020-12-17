@@ -5,3 +5,4 @@ install
 log
 run*.sh
 *.log
+src/tinyxml2

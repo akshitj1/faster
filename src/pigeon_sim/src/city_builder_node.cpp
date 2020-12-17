@@ -5,14 +5,10 @@
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "voxblox");
-  ros::NodeHandle nh;
-  ros::NodeHandle nh_private("~");
+  ros::init(argc, argv, "city_builder");
+  ros::NodeHandle nh("");
   CityBuilder city_builder(nh);
-  city_builder.buildCity();
+  city_builder.spawnCity();
   ros::spinOnce();
-
-  // Read an SDF file, and store the result in sdf.
-  // auto sdf = sdf::readFile(argv[1]);
   return 0;
 }

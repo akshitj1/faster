@@ -23,24 +23,28 @@ catkin_package(
 # include_directories(${SDFormat_INCLUDE_DIRS})
 # link_directories(${SDFormat_LIBRARY_DIRS})
 
-add_executable(simulate src/simulate.cpp src/city_builder.h)
+add_executable(city_builder_node
+  src/city_builder_node.cpp 
+  src/city_builder.h
+  src/gazebo_client.hpp
+  src/model_primitives.hpp)
 
 target_include_directories(
-  simulate 
+  city_builder_node 
   PUBLIC 
   ${TinyXML2_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS})
 
 target_link_libraries(
-  simulate
+  city_builder_node
   ignition-math4::ignition-math4
   ${TinyXML2_LIBRARIES}
   ${catkin_LIBRARIES})
 
-install(TARGETS simulate
+install(TARGETS city_builder_node
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   )
 
 install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
